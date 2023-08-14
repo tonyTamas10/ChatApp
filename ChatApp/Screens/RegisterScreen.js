@@ -5,17 +5,31 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Image,
+  TouchableOpacity
 } from "react-native";
+import { Button } from "react-native-elements"
 import React from "react";
 import Colors from "../tools/colors";
 import Input from "../Input";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { StatusBar } from "expo-status-bar";
 
-{/*  */}
+{
+  /* Register screen for new users */
+}
 
 const RegisterScreen = ({ navigation }) => {
+
+  const register = () => {
+
+  }
+
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={true}
+    >
       <StatusBar style="light" />
       <ScrollView style={{ paddingHorizontal: 20, paddingTop: 50 }}>
         <View style={{ alignItems: "center" }}>
@@ -30,7 +44,7 @@ const RegisterScreen = ({ navigation }) => {
         >
           <Text style={styles.text}>Create a ChatApp account</Text>
         </View>
-        {/* casutele pentru introducerea datelor noului utilizator */}
+        {/* Input blocks for the user's credentials */}
         <Input
           placeholder="Enter your full name"
           placeholderTextColor={Colors.grey}
@@ -39,6 +53,7 @@ const RegisterScreen = ({ navigation }) => {
         />
         <Input
           placeholder="Enter your email adress"
+          autofocus
           placeholderTextColor={Colors.grey}
           iconName="email-outline"
           label="Email"
@@ -56,9 +71,15 @@ const RegisterScreen = ({ navigation }) => {
           iconName="lock-outline"
           label="Re-enter Password"
           password
+          onSubmitEditing={register}
         />
+
+        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center', paddingBottom: 15}}>
+          <Button buttonStyle={styles.button} onPress={register} titleStyle={{color: Colors.grey}} title="Register" /> 
+        </TouchableOpacity>
+
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -82,4 +103,11 @@ const styles = StyleSheet.create({
     fontWeight: 800,
     paddingBottom: 50,
   },
+
+  button: {
+    width: 150,
+    backgroundColor: Colors.darkBlue,
+    shadowColor: Colors.black,
+    shadowColor: 'rgba(46, 229, 157, 0.4)',
+  }
 });

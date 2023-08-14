@@ -37,6 +37,7 @@ const Input = ({
           style={{ color: Colors.grey, flex: 1 }}
           {...props}
         />
+        {/* if we have a password input block we should hide the input (the icon can be pressed to show the input) */}
         {password && (
           <Icon
             name="eye-outline"
