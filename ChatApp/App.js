@@ -7,6 +7,10 @@ import "react-native-gesture-handler";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import HomeScreen from "./Screens/HomeScreen";
+import * as SplashScreen from "expo-splash-screen"
+
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 3000);
 
 const Stack = createStackNavigator();
 
