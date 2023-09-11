@@ -5,18 +5,26 @@ import Input from "../Input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../tools/colors";
 import { database, auth } from "../firebase";
+import CustomListItem from "../CustomListItem";
 
 const HomeScreen = ({ navigation }) => {
 
     return(
-        <View>
-            <Text>This is the Home page</Text>
-        </View>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <CustomListItem>
+
+                </CustomListItem>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
 export default HomeScreen
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        backgroundColor: Colors.blue
+    }
 });

@@ -4,10 +4,10 @@
     "slug": "ChatApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/chat.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splashScreen.jpg",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#082032"
     },

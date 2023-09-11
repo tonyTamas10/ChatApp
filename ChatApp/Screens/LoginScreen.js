@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
       <ScrollView style={{ paddingHorizontal: 20, paddingTop: 50 }}>
         <View style={{ alignItems: "center" }}>
           <Image
-            source={require("../assets/chat(1).png")}
+            source={require("../assets/chat.png")}
             style={styles.image}
           />
         </View>

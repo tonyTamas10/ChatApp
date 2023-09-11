@@ -10,7 +10,7 @@ import "react-native-gesture-handler";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import HomeScreen from "./Screens/HomeScreen";
-import SplashScreen from "./SplashScreen";
+import SplashScreen from "./Screens/SplashScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //SplashScreen.preventAutoHideAsync();
@@ -18,7 +18,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createStackNavigator();
 
-const defaultScreenOptions = {
+const globalScreenOptions = {
   headerStyle: { backgroundColor: "#082032" },
   headerTitleStyle: { color: "#fff" },
   headerTintColor: "white",
@@ -26,22 +26,28 @@ const defaultScreenOptions = {
 };
 
 export default function App() {
-  const [isSplashComplete, setSplashComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
 
   return (
-    <SafeAreaProvider>
       <NavigationContainer>
         <StatusBar style="light" />
-        {isSplashComplete ? (
-          <Stack.Navigator screenOptions={defaultScreenOptions}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-          </Stack.Navigator>
+        <Stack.Navigator initialRouteName="Splash" screenOptions={globalScreenOptions}>
+        {isLoading ? ( // show the splash screen if we just started the app, then proceed to the LoginScreen
+          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}}/>
         ) : (
-          <SplashScreen onAnimationComplete={() => setSplashComplete(true)} />
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen}/>
+          </>
         )}
+      </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaProvider>
   );
 }
