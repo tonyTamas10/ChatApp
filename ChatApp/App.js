@@ -10,7 +10,7 @@ import "react-native-gesture-handler";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import HomeScreen from "./Screens/HomeScreen";
-import SplashScreen from "./Screens/SplashScreen";
+import SplashScreen from "./SplashScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //SplashScreen.preventAutoHideAsync();
@@ -39,7 +39,7 @@ export default function App() {
         <StatusBar style="light" />
         <Stack.Navigator initialRouteName="Splash" screenOptions={globalScreenOptions}>
         {isLoading ? ( // show the splash screen if we just started the app, then proceed to the LoginScreen
-          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}}/>
+          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} initialParams={{onAnimationComplete: () => setIsLoading(false)}}/>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
