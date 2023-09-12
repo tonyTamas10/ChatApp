@@ -15,6 +15,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { StatusBar } from "expo-status-bar";
 import { database, auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import Loader from "../Loader";
 
 /* Register screen for new users */
 
@@ -52,6 +53,7 @@ const RegisterScreen = ({ navigation }) => {
       scrollEnabled={true}
     >
       <StatusBar style="light" />
+      <Loader />
       <ScrollView style={{ paddingHorizontal: 20, paddingTop: 50 }}>
         <View style={{ alignItems: "center" }}>
           <Image

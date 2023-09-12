@@ -19,9 +19,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 const Stack = createStackNavigator();
 
 const globalScreenOptions = {
-  headerStyle: { backgroundColor: "#082032" },
+  headerStyle: { backgroundColor: "#082032", borderBottomColor: "transparent" },
   headerTitleStyle: { color: "#fff" },
   headerTintColor: "white",
+  headerTitleAlign: "center",
   cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 };
 
