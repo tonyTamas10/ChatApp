@@ -16,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { database, auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Loader from "../Loader";
+import { StackActions } from "@react-navigation/native";
 
 /* Register screen for new users */
 
@@ -24,16 +25,22 @@ const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setPasswordAgain] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // register function called when pressing the button or Enter on the last input field
   const register = () => {
+    setLoading(true); // trigger the loading screen and wait for 3 seconds
+    setTimeout(() => {}, 3000);
 
     // checking if the passwords entered are the same
-    if(password != confirmPassword) {
-      alert("Passwords do not match! Please make sure you entered the same password.");
+    if (password != confirmPassword) {
+      setLoading(false);
+      alert(
+        "Passwords do not match! Please make sure you entered the same password."
+      );
       return;
     }
-    
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((authUser) => {
         const user = authUser.user;
@@ -42,7 +49,15 @@ const RegisterScreen = ({ navigation }) => {
           displayName: name,
         });
       })
-      .catch((error) => alert(error.message));
+      .then(() => {
+        // registration is complete
+        setLoading(false); // stop the loading screen
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        alert(error.message);
+        setLoading(false);
+      });
   };
 
   return (
@@ -53,13 +68,10 @@ const RegisterScreen = ({ navigation }) => {
       scrollEnabled={true}
     >
       <StatusBar style="light" />
-      <Loader />
+      <Loader visible={loading} />
       <ScrollView style={{ paddingHorizontal: 20, paddingTop: 50 }}>
         <View style={{ alignItems: "center" }}>
-          <Image
-            source={require("../assets/chat.png")}
-            style={styles.image}
-          />
+          <Image source={require("../assets/chat.png")} style={styles.image} />
         </View>
         <View
           style={{ alignItems: "center", flex: 1, justifyContent: "flex-end" }}
@@ -69,6 +81,7 @@ const RegisterScreen = ({ navigation }) => {
 
         <Input
           placeholder="Enter your full name"
+          autofocus
           placeholderTextColor={Colors.grey}
           iconName="account-circle-outline"
           value={name}
@@ -77,7 +90,6 @@ const RegisterScreen = ({ navigation }) => {
         />
         <Input
           placeholder="Enter your email adress"
-          autoFocus
           placeholderTextColor={Colors.grey}
           iconName="email-outline"
           value={email}

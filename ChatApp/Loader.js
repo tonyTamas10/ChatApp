@@ -12,7 +12,7 @@ const Loader = ({ visible = false }) => {
     visible && ( // visible is set to true after the user has pressed "Register"
       <View style={[styles.container, { height, width }]}>
         <View style={styles.loader}>
-            <ActivityIndicator size="large" color={Colors.basicBlue}/>
+            <ActivityIndicator size="large" color={Colors.white}/>
             <Text style={styles.text}>Loading...</Text>
         </View>
       </View>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
   loader: {
     height: 70,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.basicBlue,
     marginHorizontal: 50,
     borderRadius: 5,
     flexDirection: "row",
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
 
   text: {
     marginLeft: 10,
-    fontSize: 20,
-    fontWeight: 500
+    fontSize: 17,
+    fontWeight: 400,
+    color: Colors.white
   }
 });

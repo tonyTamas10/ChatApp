@@ -11,6 +11,7 @@ import Input from "../Input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../tools/colors";
 import { database, auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -27,22 +28,25 @@ const LoginScreen = ({ navigation }) => {
     return unsubscribe;
   }, []);
 
-  const signIn = () => {};
+  const signIn = () => {
+
+      signInWithEmailAndPassword(auth, email, password)
+      .catch((error) => alert(error));
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <ScrollView style={{ paddingHorizontal: 20, paddingTop: 50 }}>
         <View style={{ alignItems: "center" }}>
-          <Image
-            source={require("../assets/chat.png")}
-            style={styles.image}
-          />
+          <Image source={require("../assets/chat.png")} style={styles.image} />
         </View>
         <Input
           placeholder="Enter your email adress"
           placeholderTextColor={Colors.grey}
           iconName="email-outline"
           label="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <Input
           placeholder="Enter your password"
@@ -50,6 +54,9 @@ const LoginScreen = ({ navigation }) => {
           iconName="lock-outline"
           label="Password"
           password
+          onSubmitEditing={signIn}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
         <View
           style={{

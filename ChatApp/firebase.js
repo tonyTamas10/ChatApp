@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { createUserWithEmailAndPassword, updateProfile, getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, getReactNativePersistence, initializeAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {

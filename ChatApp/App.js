@@ -40,7 +40,7 @@ export default function App() {
         <StatusBar style="light" />
         <Stack.Navigator initialRouteName="Splash" screenOptions={globalScreenOptions}>
         {isLoading ? ( // show the splash screen if we just started the app, then proceed to the LoginScreen
-          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} initialParams={{onAnimationComplete: () => setIsLoading(false)}}/>
+          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} />
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
