@@ -12,9 +12,7 @@ import RegisterScreen from "./Screens/RegisterScreen";
 import HomeScreen from "./Screens/HomeScreen";
 import SplashScreen from "./SplashScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-//SplashScreen.preventAutoHideAsync();
-//setTimeout(SplashScreen.hideAsync, 3000);
+import NewChatScreen from "./Screens/NewChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,19 +34,27 @@ export default function App() {
   }, []);
 
   return (
-      <NavigationContainer>
-        <StatusBar style="light" />
-        <Stack.Navigator initialRouteName="Splash" screenOptions={globalScreenOptions}>
+    <NavigationContainer>
+      <StatusBar style="light" />
+      <Stack.Navigator
+        initialRouteName="Splash"
+        screenOptions={globalScreenOptions}
+      >
         {isLoading ? ( // show the splash screen if we just started the app, then proceed to the LoginScreen
-          <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} />
+          <Stack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen}/>
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="New Chat" component={NewChatScreen} />
           </>
         )}
       </Stack.Navigator>
-      </NavigationContainer>
+    </NavigationContainer>
   );
 }
