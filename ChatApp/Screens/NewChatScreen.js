@@ -3,13 +3,24 @@ import { View, Text, FlatList } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../tools/colors";
-import { firestore } from "../firebase";
+import {firestore} from "../firebase";
 import * as Contacts from "expo-contacts";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const NewChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
   const [contacts, setContacts] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
+
+  const createChat = async (contact) => {
+    try {
+      await firestore.collection("chats").add({chatName: contact.name})
+      // Navigate to the chat screen for the new chat
+      navigation.navigate("Chat", { chatId: contact.id });
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -18,28 +29,34 @@ const NewChatScreen = ({ navigation }) => {
   }, [navigation]);
 
   const searchChat = async () => {
-    // fetch contacts when the user initiates a search
-    const { status } = await Contacts.requestPermissionsAsync();
-    if (status === "granted") {
-      const { data } = await Contacts.getContactsAsync({
-        fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
-      });
-      if (data.length > 0) {
-        setContacts(data);
+    try {
+      // Request permissions and fetch contacts
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === "granted") {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
+        });
+        if (data.length > 0) {
+          // Set contacts state
+          setContacts(data);
+
+          // Filter contacts based on the input provided
+          const filtered = data.filter(
+            (contact) =>
+              contact.name.toLowerCase().includes(input.toLowerCase()) ||
+              (contact.phoneNumbers &&
+                contact.phoneNumbers.some((phoneNumber) =>
+                  phoneNumber.number.includes(input)
+                ))
+          );
+
+          // Set filtered contacts as the data source
+          setFilteredContacts(filtered);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
     }
-
-    // we filter contacts based on the input provided
-    const filteredContacts = contacts.filter(
-      (contact) =>
-        contact.name.toLowerCase().includes(input.toLowerCase()) ||
-        (contact.phoneNumbers &&
-          contact.phoneNumbers.some((phoneNumber) =>
-            phoneNumber.number.includes(input)
-          ))
-    );
-
-    console.log("Filtered Contacts:", filteredContacts);
   };
 
   useEffect(() => {
@@ -74,14 +91,21 @@ const NewChatScreen = ({ navigation }) => {
 
       {/* Display the filtered contacts */}
       <FlatList
-        data={contacts}
+        data={filteredContacts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={0.2} style={styles.contactBlock}>
+          <TouchableOpacity
+            activeOpacity={0.2}
+            style={styles.contactBlock}
+            onPress={() => createChat(item, navigation)}
+          >
             <Avatar rounded size={50} source={require("../assets/user.png")} />
-            <Text style={styles.contactBlockText}>
-              {item.name} - {item.phoneNumbers && item.phoneNumbers[0]?.number}
-            </Text>
+            <View style={{ margin: 10 }}>
+              <Text style={styles.contactBlockText}>{item.name}</Text>
+              <Text style={{ color: Colors.grey, fontSize: 16 }}>
+                {item.phoneNumbers && item.phoneNumbers[0]?.number}
+              </Text>
+            </View>
           </TouchableOpacity>
         )}
       />
@@ -102,10 +126,12 @@ const styles = {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.blue,
-    margin: 20
+    margin: 20,
   },
 
   contactBlockText: {
-    color: Colors.white
-  }
+    color: Colors.white,
+    fontSize: 17,
+    fontWeight: "bold",
+  },
 };

@@ -18,10 +18,11 @@
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
     "expo": "~48.0.15",
+    "expo-contacts": "~12.0.1",
     "expo-dev-client": "~2.2.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
-    "firebase": "^10.3.1",
+    "firebase": "^10.4.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",
@@ -35,7 +36,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-web": "~0.18.10",
-    "expo-contacts": "~12.0.1"
+    "undefined": "firebase/firestore"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

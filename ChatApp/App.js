@@ -13,6 +13,7 @@ import HomeScreen from "./Screens/HomeScreen";
 import SplashScreen from "./SplashScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import NewChatScreen from "./Screens/NewChatScreen";
+import ChatScreen from "./Screens/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="New Chat" component={NewChatScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
           </>
         )}
       </Stack.Navigator>
