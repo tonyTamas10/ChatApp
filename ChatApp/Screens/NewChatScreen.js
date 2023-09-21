@@ -3,24 +3,26 @@ import { View, Text, FlatList } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../tools/colors";
-import {firestore} from "../firebase";
-import * as Contacts from "expo-contacts";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { auth, firestore } from "../firebase";
+//import * as Contacts from "expo-contacts";
+//import { TouchableOpacity } from "react-native-gesture-handler";
 
 const NewChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [filteredContacts, setFilteredContacts] = useState([]);
-
-  const createChat = async (contact) => {
+  //const [contacts, setContacts] = useState([]);
+  //const [filteredContacts, setFilteredContacts] = useState([]);
+  
+  const createChat = async () => {
     try {
-      await firestore.collection("chats").add({chatName: contact.name})
-      // Navigate to the chat screen for the new chat
-      navigation.navigate("Chat", { chatId: contact.id });
+      firestore.collection("chats").add({ chatName: input });
+      navigation.replace("Chat");
     } catch (error) {
       console.error("Error creating chat:", error);
+      // Handle the error here, such as displaying an alert to the user.
+      alert("Error creating chat. Please try again later.");
     }
   };
+  
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,6 +30,8 @@ const NewChatScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+  {
+    /*
   const searchChat = async () => {
     try {
       // Request permissions and fetch contacts
@@ -62,6 +66,8 @@ const NewChatScreen = ({ navigation }) => {
   useEffect(() => {
     searchChat(); // Fetch contacts when the component loads
   }, []);
+*/
+  }
 
   return (
     <View style={styles.container}>
@@ -70,7 +76,7 @@ const NewChatScreen = ({ navigation }) => {
         placeholder="Search name or number"
         value={input}
         onChangeText={(text) => setInput(text)}
-        onSubmitEditing={searchChat}
+        onSubmitEditing={createChat}
         inputContainerStyle={{
           borderBottomWidth: 0,
           backgroundColor: Colors.darkBlue,
@@ -89,7 +95,7 @@ const NewChatScreen = ({ navigation }) => {
         inputStyle={{ color: Colors.white }}
       />
 
-      {/* Display the filtered contacts */}
+      {/* Display the filtered contacts
       <FlatList
         data={filteredContacts}
         keyExtractor={(item) => item.id}
@@ -109,6 +115,7 @@ const NewChatScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
       />
+        */}
     </View>
   );
 };
