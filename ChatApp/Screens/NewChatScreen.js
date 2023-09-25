@@ -4,22 +4,36 @@ import { Avatar, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../tools/colors";
 import { auth, firestore } from "../firebase";
-//import * as Contacts from "expo-contacts";
-//import { TouchableOpacity } from "react-native-gesture-handler";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import * as Contacts from "expo-contacts";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const NewChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
-  //const [contacts, setContacts] = useState([]);
-  //const [filteredContacts, setFilteredContacts] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
   
-  const createChat = async () => {
+  const createChat = async (contact) => {
+
     try {
-      firestore.collection("chats").add({ chatName: input });
-      navigation.replace("Chat");
+      // Create a new chat document in the 'chats' collection
+      const chatRef = doc(collection(firestore, "chats"));
+      
+      // Setting the chat data
+      const chatData = {
+        chatName: contact.name,
+        chatID: contact.id
+      };
+      
+      // Set the chat data in Firestore
+      // The chat needs to be transformed in a document to add it to a collection
+      await setDoc(chatRef, chatData);
+      
+      console.log("Chat created successfully");
+
+      navigation.replace("Chat", { chatId: chatRef.id, contactName: contact.name })
     } catch (error) {
       console.error("Error creating chat:", error);
-      // Handle the error here, such as displaying an alert to the user.
-      alert("Error creating chat. Please try again later.");
     }
   };
   
@@ -30,8 +44,6 @@ const NewChatScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  {
-    /*
   const searchChat = async () => {
     try {
       // Request permissions and fetch contacts
@@ -66,8 +78,6 @@ const NewChatScreen = ({ navigation }) => {
   useEffect(() => {
     searchChat(); // Fetch contacts when the component loads
   }, []);
-*/
-  }
 
   return (
     <View style={styles.container}>
@@ -76,7 +86,7 @@ const NewChatScreen = ({ navigation }) => {
         placeholder="Search name or number"
         value={input}
         onChangeText={(text) => setInput(text)}
-        onSubmitEditing={createChat}
+        onSubmitEditing={searchChat}
         inputContainerStyle={{
           borderBottomWidth: 0,
           backgroundColor: Colors.darkBlue,
@@ -95,7 +105,6 @@ const NewChatScreen = ({ navigation }) => {
         inputStyle={{ color: Colors.white }}
       />
 
-      {/* Display the filtered contacts
       <FlatList
         data={filteredContacts}
         keyExtractor={(item) => item.id}
@@ -103,7 +112,7 @@ const NewChatScreen = ({ navigation }) => {
           <TouchableOpacity
             activeOpacity={0.2}
             style={styles.contactBlock}
-            onPress={() => createChat(item, navigation)}
+            onPress={() => createChat(item)}
           >
             <Avatar rounded size={50} source={require("../assets/user.png")} />
             <View style={{ margin: 10 }}>
@@ -115,7 +124,6 @@ const NewChatScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
       />
-        */}
     </View>
   );
 };

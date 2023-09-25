@@ -11,30 +11,55 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import Input from "../Input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../tools/colors";
-import { database, auth } from "../firebase";
+import { auth, firestore } from "../firebase";
 import CustomListItem from "../CustomListItem";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import NewChatScreen from "./NewChatScreen";
+import {
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
-// main screen of the app with all the chats a user has
+// Main screen of the app with all the chats a user has
 
 const HomeScreen = ({ navigation }) => {
+  const [chats, setChats] = useState([]);
+
   const signOutUser = () => {
-    // when the user presses the icon with his profile picture he will sign out
+    // When the user presses the icon with his profile picture he will sign out
     auth.signOut().then(() => {
-      navigation.replace("Login"); // will replace the stack with the LoginScreen
+      navigation.replace("Login"); // Will replace the stack with the LoginScreen
     });
   };
 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const chatsCollection = collection(firestore, "chats"); // Providing the collection with all the chats
+
+    const unsubscribe = onSnapshot(chatsCollection, (snapshot) => {
+      // Unsubscribe to clean up the function, onSnapshot to get a live look at the collection
+      const updatedChats = snapshot.docs.map((doc) => ({
+        // Return a map with every doc from the collection
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setChats(updatedChats); // List with every chat
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        // user is authenticated
+        // User is authenticated
         setUser(authUser);
       } else {
-        // user is not authenticated, navigate back to the login screen
+        // User is not authenticated, navigate back to the login screen
         navigation.navigate("Login");
       }
     });
@@ -46,7 +71,8 @@ const HomeScreen = ({ navigation }) => {
       title: "ChatApp",
       headerStyle: { backgroundColor: Colors.darkBlue },
       headerLeft: () => (
-        // configuration for the left side of the navigation header
+        // Configuration for the left side of the navigation header
+        // Only functionality of the user profile pic is to sign the user out when pressed
         <View style={{ marginLeft: 20 }}>
           <TouchableOpacity onPress={signOutUser}>
             <Avatar rounded source={require("../assets/user.png")} />
@@ -70,18 +96,24 @@ const HomeScreen = ({ navigation }) => {
     });
   }, []);
 
+  const enterChat = (id, chatName) => {
+    navigation.navigate("Chat", { id, chatName });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <CustomListItem></CustomListItem>
+      <ScrollView style={{ height: "100%" }}>
+        {chats.map(({ id, data: { chatName } }) => (
+          <CustomListItem key={id} id={id} chatName={chatName} enterChat={enterChat}/>
+        ))}
       </ScrollView>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("New Chat")}
-          activeOpacity={0.3}
-        >
-          <SimpleLineIcons name="pencil" size={30} color={Colors.white} />
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("New Chat")}
+        activeOpacity={0.3}
+      >
+        <SimpleLineIcons name="pencil" size={30} color={Colors.white} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -90,9 +122,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.blue,
-    position: "relative",
   },
 
   addButton: {

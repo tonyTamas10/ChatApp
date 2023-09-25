@@ -8,11 +8,11 @@ import Colors from "./tools/colors";
 
 const CustomListItem = ({ id, chatName, enterChat }) => {
   return (
-    <ListItem containerStyle={styles.container}>
+    <ListItem onPress={() => enterChat(id, chatName)} key={id} containerStyle={styles.container}>
       <Avatar style={styles.icon} rounded source={require("./assets/user.png")} />
       <ListItem.Content>
         <ListItem.Title style={{fontWeight: "bold", color: Colors.white}}>
-          Messi
+          {chatName}
         </ListItem.Title>
         <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail" style={{color: Colors.grey}}> {/* using elipsesizeMode in order to hide the rest of the message from a user if the message is too long */}
           This is a test in order for me to figure if this is looking great or not

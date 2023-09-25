@@ -11,7 +11,7 @@ import Input from "../Input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../tools/colors";
 import { database, auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
