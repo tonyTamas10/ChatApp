@@ -47,6 +47,7 @@ const LoginScreen = ({ navigation }) => {
           label="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
         />
         <Input
           placeholder="Enter your password"
