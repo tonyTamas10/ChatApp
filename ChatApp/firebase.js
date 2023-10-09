@@ -11,12 +11,18 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyA2LljLNoHOZgDow50YdyvL4ly2st6bimU",
+
   authDomain: "chatapp-a08f1.firebaseapp.com",
+
+  databaseURL: "https://chatapp-a08f1-default-rtdb.europe-west1.firebasedatabase.app",
+
   projectId: "chatapp-a08f1",
+
   storageBucket: "chatapp-a08f1.appspot.com",
+
   messagingSenderId: "314335475865",
+
   appId: "1:314335475865:web:ade94e268c358c899ca008",
-  measurementId: "G-YXVM43C3CF"
 };
 
 // Initialize Firebase
