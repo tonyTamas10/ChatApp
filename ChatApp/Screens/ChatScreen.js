@@ -127,6 +127,19 @@ const ChatScreen = ({ navigation, route }) => {
     return unsubscribe;
   }, [route]);
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp.toDate()); // Convert Firestore timestamp to JavaScript Date object
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+  
+    // Format hours and minutes to ensure they are two digits
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  
+    return `${formattedHours}:${formattedMinutes}`;
+  };
+  
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.blue }}>
       <StatusBar style="light" />
@@ -141,15 +154,19 @@ const ChatScreen = ({ navigation, route }) => {
             <ScrollView contentContainerStyle={{paddingTop: 15}}>
               {/* Take all the messages and show them on the screen by sender or receiver */}
               {messages.map(({ id, data }) =>
+              
                 data.email === auth.currentUser.email ? (
-                  <View key={id} style={styles.receiver}>
+                  <View key={id} style={styles.receiver} elevation={8}>
                     <Avatar rounded position="absolute" size={30} bottom={-15} right={-5} source={require("../assets/user.png")} />
                     <Text style={styles.receiverMessage}>{data.message}</Text>
+                    <Text style={{color: Colors.grey}}>{formatTimestamp(data.timestamp)}</Text>
                   </View>
                 ) : (
-                  <View style={styles.sender}>
-                    <Avatar rounded position="absolute" size={30} bottom={-15} right={-5} source={require("../assets/user.png")} />
+                  <View key={id} style={styles.sender} elevation={8}>
+                    <Avatar rounded position="absolute" size={30} bottom={-15} left={-5} source={require("../assets/user.png")} />
+                    <Text style={{color: Colors.grey, fontSize: 12}}>{data.displayName}</Text>
                     <Text style={styles.senderMessage}>{data.message}</Text>
+                    <Text style={{color: Colors.grey, alignSelf: "flex-end"}}>{formatTimestamp(data.timestamp)}</Text>
                   </View>
                 )
               )}
@@ -211,21 +228,38 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 15,
     marginBottom: 20,
+    shadowOpacity: 0.6,
+    shadowOffset: {width: -2, height: 10},
+    shadowRadius: 4,
+    shadowColor: Colors.black
   },
 
   receiverMessage: {
     color: Colors.white,
-    fontWeight: "500",
-    marginLeft: 10
+    fontWeight: "400",
+    marginLeft: 10,
+    fontSize: 17
   },
 
   sender: {
     padding: 15, 
+    backgroundColor: Colors.darkBlue,
     alignSelf: "flex-start",
     position: "relative",
     maxWidth: "80%",
     borderRadius: 20,
-    marginRight: 15,
-    marginBottom: 20
+    marginLeft: 15,
+    marginBottom: 20,
+    shadowOpacity: 0.6,
+    shadowOffset: {width: -2, height: 10},
+    shadowRadius: 4,
+    shadowColor: Colors.black
   },
+
+  senderMessage: {
+    color: Colors.white,
+    fontWeight: "400",
+    fontSize: 17,
+    marginRight: 10
+  }
 });
